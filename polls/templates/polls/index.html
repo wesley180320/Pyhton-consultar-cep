@@ -47,6 +47,7 @@ input {
     background-color: teal;
     margin-top: 20px;
     height: 50vh;
+    text-align: center;
 }
 
 p {
@@ -60,24 +61,29 @@ p {
 
   <section id="home">
 
+      <form id="pesquisar2" method="post" >
+
+          {% csrf_token %}
+
           <div>
-            <input type="text"  placeholder="CEP" id="cep" >
+            <input type="text"  placeholder="cep" name="cep" id="cep" >
             <input type="submit" value="Pesquisar CEP " id="pesquisar">
             <input type="submit" value="Limpar" id="limpar">
           </div>
 
           <div id="container">
-              <p typeof="text" id="localidade"  >
+              <p typeof="text" id="localidade" data-model-name="localidade" >
               <p typeof="text" id="logradouro">
               <p typeof="text" id="bairro">
           </div>
 
+      </form>
   </section>
 
 </body>
 
 <script>
-const pesquisar = document.getElementById("pesquisar");
+const pesquisar = document.getElementById("pesquisar2");
 const cep = document.getElementById("cep");
 const limpar = document.getElementById("limpar");
 
@@ -85,7 +91,11 @@ const localidade = document.getElementById("localidade");
 const logradouro = document.getElementById("logradouro");
 const bairro = document.getElementById("bairro");
 
-async function pesquisarCep() {
+
+
+async function pesquisarCep(e) {
+     e.preventDefault();
+
     const cep_valor = cep.value;
 
     if (cep_valor.length == 8) {
@@ -104,11 +114,14 @@ async function pesquisarCep() {
 }
 
 function limparDados() {
+
+
     document.getElementById("cep").value = "";
     localidade.innerHTML = "";
     logradouro.innerHTML = "";
     bairro.innerHTML = "";
     document.getElementById("container").style.display = "none"
+    window.location.reload(true);
 }
 
 async function inserirDados(cep_json) {
@@ -117,8 +130,8 @@ async function inserirDados(cep_json) {
     bairro.innerHTML = "Bairro: " + cep_json.bairro;
 }
 
-pesquisar.addEventListener("click", pesquisarCep);
-limpar.addEventListener("click", limparDados);
+pesquisar2.addEventListener("click", pesquisarCep);
+limpar.addEventListener("click", limparDados );
 
 
 </script>
